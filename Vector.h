@@ -2,6 +2,28 @@
 #include<iostream>
 #include<string.h>
 
+template<class T>
+class Iterator{
+    T* m_data;
+public:
+    Iterator(T* ptr):m_data(ptr){}
+    T& operator*()const {return *m_data;}
+    Iterator& operator++(){
+        ++m_data;
+        return *this;
+    };
+    bool operator!=(const Iterator& it)const {return m_data != it.m_data;}
+    //bool operator==(const Iterator& it)const {return m_data == it.m_data;}
+};
+
+
+
+
+
+
+
+
+
 template<typename T>
 class Vector{
     T* m_data; // 元素
@@ -17,6 +39,7 @@ class Vector{
     // 结束递归
     void RecFunc(){}
 public:
+    using iterator = Iterator<T>;
     // 构造函数
     // opetator new 和 placement new
     // 注意使用static_cast进行强制类型转换，比直接使用（T*）更好，会进行编译时的类型检查
@@ -55,7 +78,7 @@ public:
 
     // 自定义元素的两种实现方式
     // 第一种
-    Vector(std::initializer_list<T> list): m_data(static_cast<T*>(operator new(list.size()))), m_size(list.size()), m_memSize(list.size() * sizeof(T)){
+    Vector(std::initializer_list<T> list): m_data(static_cast<T*>(operator new(list.size() * sizeof(T)))), m_size(list.size()), m_memSize(list.size() * sizeof(T)){
         new(m_data) T(0);
         memcpy(m_data, list.begin(), m_memSize);
     }
@@ -86,5 +109,6 @@ public:
         }
     }
 
-
+    iterator begin(){return &m_data[0];}
+    iterator end(){return &m_data[m_size];}
 };
