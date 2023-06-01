@@ -19,6 +19,7 @@ class Vector{
 public:
     // 构造函数
     // opetator new 和 placement new
+    // 注意使用static_cast进行强制类型转换，比直接使用（T*）更好，会进行编译时的类型检查
     Vector():m_data(static_cast<T*>(operator new(10))), m_size(10), m_memSize(sizeof(T) * 10){
         new (m_data) T(0);
     }
